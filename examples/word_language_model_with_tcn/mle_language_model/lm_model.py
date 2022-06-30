@@ -101,7 +101,6 @@ class TCNForLM(TCN, CommonLayers):
                 for split_type in ["valid", "test"]:
                     val_loss[split_type] = 0
                     data_loaders[split_type].reset()
-                    count = 0
                     for x_data_test, y_data_test in data_loaders[split_type]:
                         feed_dict = {
                             self.input_placeholder_tokens: x_data_test,
@@ -109,9 +108,9 @@ class TCNForLM(TCN, CommonLayers):
                             self.training_mode: False,
                         }
                         val_loss[split_type] += sess.run(self.training_loss, feed_dict=feed_dict)
-                        count += 1
 
-                    val_loss[split_type] = val_loss[split_type] / count
+
+                    val_loss[split_type] = val_loss[split_type] / len(data_loaders[split_type])
 
                 summary_val = sess.run(
                     self.merged_summary_op_val, feed_dict={self.validation_loss: val_loss["valid"]}
