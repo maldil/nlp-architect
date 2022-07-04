@@ -206,7 +206,7 @@ class TextSpanScoring:
             phrase_scores[phrase] = score
         for phrase in phrase_scores:
             score = [phrase_scores[p] for p in self.index.get_phrase(self.index.get_pid(phrase))]
-            phrase_scores[phrase] = sum(score) / len(score)
+            phrase_scores[phrase] = np.mean(score)
         return self._maybe_group_and_sort(group_similar_spans, phrase_scores)
 
     @staticmethod
